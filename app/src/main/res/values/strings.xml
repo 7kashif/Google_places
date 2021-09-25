@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Google_places</string>
+
+    <string name="api_key">AIzaSyAJ761o63MSMn0FB8wxE5vzmiyBtEnwusc</string>
+</resources>
