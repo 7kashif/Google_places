@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
 
         val fragment =
             supportFragmentManager.findFragmentById(binding.autoCompleteFragment.id) as AutocompleteSupportFragment
+
+        //here we set the fields we want to get
         fragment.setPlaceFields(
             listOf(
                 Place.Field.ID,
@@ -32,14 +34,16 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
+        //we need to initialize places with our activity
         if (!Places.isInitialized())
             Places.initialize(this, getString(R.string.api_key))
 
         val placesClient = Places.createClient(this)
 
+        //here we get the place we select from google auto complete fragment
         fragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-            override fun onPlaceSelected(pl: Place) {
-                val photoRequest = FetchPhotoRequest.builder(
+            override fun onPlaceSelected(pl: Place) { //in case the place is successfully selected
+                val photoRequest = FetchPhotoRequest.builder( //build a photo request to get first photo in the list of photos we get from response
                     Objects.requireNonNull(pl.photoMetadatas)[0]
                 ).build()
                 placesClient.fetchPhoto(photoRequest).addOnSuccessListener { response ->
@@ -53,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this@MainActivity,pl.latLng.toString(),Toast.LENGTH_LONG).show()
             }
 
-            override fun onError(st: Status) {
+            override fun onError(st: Status) { //in case any error occurred
                 Toast.makeText(this@MainActivity, st.statusMessage, Toast.LENGTH_LONG).show()
             }
         })
